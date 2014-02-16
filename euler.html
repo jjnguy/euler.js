@@ -3,27 +3,6 @@
 </head>
 <body>
 	<div id="solutions">
-		<div data-problem="1">
-			<label>Solution1</label><input id="p1" readonly />
-		</div>
-		<div data-problem="2">
-			<label>Solution2</label><input id="p2" readonly />
-		</div>
-		<div data-problem="3">
-			<label>Solution3</label><input id="p3" readonly />
-		</div>
-		<div data-problem="4">
-			<label>Solution4</label><input id="p4" readonly />
-		</div>
-		<div data-problem="5">
-			<label>Solution5</label><input id="p5" readonly />
-		</div>
-		<div data-problem="6">
-			<label>Solution6</label><input id="p6" readonly />
-		</div>
-		<div data-problem="7">
-			<label>Solution7</label><input id="p7" readonly />
-		</div>
 	</div>
 </body>
 <script>
@@ -71,85 +50,114 @@ function isPalindrome(n){
 }
 </script>
 <script>
-	var problemTracker = {};
-</script>
-<script data-problem="7">
-	var primeCount = 0;
-	for(var i = 0; i < 100000000; i++){
-		if (isPrime(i)) {
-			primeCount++;
-			if (primeCount == 10001){
-				giveAnswer(7, i);
-				break;
+	var problemTracker = [];
+	
+	problemTracker[8] = function(){
+		
+	};
+
+	problemTracker[7] = function(){
+		var primeCount = 0;
+		for(var i = 0; i < 100000000; i++){
+			if (isPrime(i)) {
+				primeCount++;
+				if (primeCount == 10001){
+					return i;
+				}
 			}
 		}
-	}
-</script>
-<script data-problem="6">
-	var sum = 0;
-	var sumSquares = 0;
-	for(var i = 1; i <= 100; i++){
-		sum += i;
-		sumSquares += i*i;
-	} 
-	giveAnswer(6, sum*sum - sumSquares);
-</script>
-<script data-problem="5">
-	for(var i = 2520; i < 1000000000; i++) {
-		var is = true;
-		for(var j = 1; j <= 20; j++) {
-			if (!isDivisibleBy(i,j)){
-				is = false;
-				break;
-			}
-		}
-		if (is){
-			giveAnswer(5, i);
-			break;
-		}
-	}
-</script>
-<script data-problem="4">
-	var isSolved = false;
-	var answer = 0;
-	for(var i = 999; i > 800; i--) {
-		for(var j = 999; j > 800; j--) {
-			if (isPalindrome(i*j)) {
-				isSolved = true;
-				answer = i*j;
-				break;
-			}
-		}
-		if (isSolved) break;
-	}
-	giveAnswer(4, answer);
-</script>
-<script data-problem="3">
-	var dividend = 600851475143;
-	var divisor = Math.round(Math.sqrt(dividend + 2))+1;
-	for(var i = divisor; i > 0; i -=2) {
-		if (isDivisibleBy(dividend, i) && isPrime(i)) {
-			giveAnswer(3, i);
-			break;
-		}
-	}
-</script>
-<script data-problem="2">
-	var sum = 0;
-	for(var i = 0; i < 4000000; i++){
-		var fibn = fib(i);
-		if (fibn > 4000000) break;
-		if (isEven(fibn)) sum += fibn;
-	}
-	giveAnswer(2, sum);
-</script>
-<script data-problem="1">
-	var sum = 0;
-	for (var i = 0; i < 1000; i++){
-		if (isDivisibleBy(i, 5) || isDivisibleBy(i, 3)){
+	};
+
+	problemTracker[6] = function(){
+		var sum = 0;
+		var sumSquares = 0;
+		for(var i = 1; i <= 100; i++){
 			sum += i;
+			sumSquares += i*i;
+		} 
+		return sum*sum - sumSquares;
+	};
+
+	problemTracker[5] = function(){
+		for(var i = 2520; i < 1000000000; i++) {
+			var is = true;
+			for(var j = 1; j <= 20; j++) {
+				if (!isDivisibleBy(i,j)){
+					is = false;
+					break;
+				}
+			}
+			if (is){
+				return i;
+			}
 		}
+	};
+
+	problemTracker[4] = function (){
+		var isSolved = false;
+		var answer = 0;
+		for(var i = 999; i > 800; i--) {
+			for(var j = 999; j > 800; j--) {
+				if (isPalindrome(i*j)) {
+					isSolved = true;
+					answer = i*j;
+					break;
+				}
+			}
+			if (isSolved) break;
+		}
+		return answer;
+	};
+
+	problemTracker[3] = function (){
+		var dividend = 600851475143;
+		var divisor = Math.round(Math.sqrt(dividend + 2))+1;
+		for(var i = divisor; i > 0; i -=2) {
+			if (isDivisibleBy(dividend, i) && isPrime(i)) {
+				return i;
+			}
+		}
+	};
+
+	problemTracker[2] = function(){
+		var sum = 0;
+		for(var i = 0; i < 4000000; i++){
+			var fibn = fib(i);
+			if (fibn > 4000000) break;
+			if (isEven(fibn)) sum += fibn;
+		}
+		return sum;
+	};
+
+	problemTracker[1] = function(){
+		var sum = 0;
+		for (var i = 0; i < 1000; i++){
+			if (isDivisibleBy(i, 5) || isDivisibleBy(i, 3)){
+				sum += i;
+			}
+		}
+		return sum;
+	};
+	
+	var solutionDiv = document.getElementById('solutions');
+	for(var i = 1; i < problemTracker.length; i++) {
+		var newDiv = document.createElement('div');
+		var newLabel = document.createElement('label');
+		var newInput = document.createElement('input');
+		var newButton = document.createElement('button');
+		newButton.onclick = (function(probNum, input){
+			return function(){
+				input.value = problemTracker[probNum]();
+			}
+		})(i, newInput);
+		newButton.appendChild(document.createTextNode('solve'));
+		
+		newInput.readOnly = true;
+		newLabel.appendChild(document.createTextNode('Solution ' + i));
+		newLabel.appendChild(newInput);
+		newDiv.appendChild(newLabel);
+		newDiv.appendChild(newButton);
+		solutionDiv.appendChild(newDiv);
 	}
-	giveAnswer(1, sum);
 </script>
 </html>
