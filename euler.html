@@ -201,6 +201,29 @@ function nextTri() {
 	// all problems are solved below
 	// some data can be found in the #data div
 	
+	problemTracker[14] = function(){
+		function cz(n){
+			if (isEven(n)) return n / 2;
+			return n * 3 + 1;
+		}
+		var maxChainCount = 0;
+		var chainNum = 0;
+		for(var i = 999999; i > 1; i--) {
+			var result = i;
+			var chainCount = 0;
+			while(result != 1) {
+				result = cz(result);
+				chainCount++;
+			}
+			if (chainCount > maxChainCount){
+				chainNum = i;
+				maxChainCount = chainCount;
+				console.log('number: ' + chainNum + ', count: ' + maxChainCount);
+			}
+		}
+		return chainNum;
+	};
+	
 	problemTracker[13] = function(data){
 		var nums = data.split('\n');
 		var sum = 0;
