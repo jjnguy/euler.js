@@ -33,6 +33,20 @@
 	</div>
 </body>
 <script>
+// extensions 
+Array.prototype.distinct = function(keyFunc){
+	var result = [];
+	var foundKeys = {};
+	for (var i = 0; i < this.length; i++){
+		var key = keyFunc(this[i]);
+		if (!foundKeys[key]){
+			result.push(this[i]);
+			foundKeys[key] = true;
+		}
+	}
+	return result;
+};
+
 
 // utility functions
 function isDivisibleBy(number, divisor){
@@ -56,24 +70,6 @@ function isPrime(n){
 	return true;
 }
 
-var factorM = { 0 : [], 1: [], 2: [2], 3: [3], 4:[2,4]};
-function listFactors(n) {
-	if (n == 1) return [];
-	if (n == 0) return [];
-	if (n == 2) return [2];
-	if (n == 3) return [3];
-	if (typeof(factorM[n]) !== 'undefined') return factorM[n];
-	for(var i = 2; i < n; i++){
-		if (isDivisibleBy(n, i)) {
-			var result = listFactors(i).concat(listFactors(n/i)).concat([n]);
-			factorM[n] = result;
-			return result;
-		}
-	}
-	factorM[n] = [n];
-	return [n];
-}
-
 var fibM = [1,1,2,3,5,8];
 function fib(n){
 	if (fibM[n])return fibM[n];
@@ -89,6 +85,13 @@ function isPalindrome(n){
 	}
 	return true;
 }
+
+var currentTri = 0;
+var currentTriNum = 0;
+function nextTri() {
+	currentTri += ++currentTriNum;
+	return currentTri;
+}
 </script>
 <script>
 	var problemTracker = [];
@@ -97,12 +100,15 @@ function isPalindrome(n){
 	// some data can be found in the #data div
 	
 	problemTracker[12] = function(){
-		for(var i = 28; i < 10000000000; i++) {
-			var divisorCount = 0;
-			for(var divisor = 1; divisor<=i; divisor++) {
-				if (isDivisibleBy(i, divisor)) divisorCount++;
+		var tri = 0;
+		while(true){
+			var tri = nextTri();
+			var lim = Math.sqrt(tri);
+			var facCount = 0;
+			for(var i = 1; i < lim; i++) {
+				if (tri % i == 0) facCount++;
 			}
-			if (divisorCount > 500) return i;
+			if (facCount > 250) return tri;
 		}
 	};
 	
