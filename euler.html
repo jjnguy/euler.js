@@ -194,12 +194,28 @@ function nextTri() {
 	currentTri += ++currentTriNum;
 	return currentTri;
 }
+
+var pathMemo = {};
+function countPaths(gridWidth, gridHeight){
+	if (gridWidth == 1) return gridHeight + 1;
+	if (gridHeight == 1) return gridWidth + 1;
+	
+	if (pathMemo[gridWidth+'-'+gridHeight]) return pathMemo[gridWidth+'-'+gridHeight];
+	
+	var result = countPaths(gridWidth - 1, gridHeight) + countPaths(gridWidth, gridHeight - 1);
+	pathMemo[gridWidth+'-'+gridHeight] = result;
+	return result;
+}
 </script>
 <script>
 	var problemTracker = [];
 	
 	// all problems are solved below
 	// some data can be found in the #data div
+	
+	problemTracker[15] = function(){
+		return countPaths(20, 20);
+	};
 	
 	problemTracker[14] = function(){
 		function cz(n){
