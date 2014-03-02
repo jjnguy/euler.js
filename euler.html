@@ -132,6 +132,21 @@
 20849603980134001723930671666823555245252804609722
 53503534226472524250874054075591789781264330331690
 		</div>
+		<div id="d18">75
+95 64
+17 47 82
+18 35 87 10
+20 04 82 47 65
+19 01 23 75 03 34
+88 02 77 73 07 63 67
+99 65 04 28 06 16 70 92
+41 41 26 56 83 40 80 70 33
+41 48 72 33 47 32 37 16 94 29
+53 71 44 65 25 43 91 52 97 51 14
+70 11 33 28 77 73 17 78 39 68 17 57
+91 71 52 38 17 14 91 43 58 50 27 29 48
+63 66 04 68 89 53 67 30 73 16 69 87 40 31
+04 62 98 27 23 09 70 98 73 93 38 53 60 04 23</div>
 	</div>
 </body>
 <script>
@@ -212,6 +227,78 @@ function countPaths(gridWidth, gridHeight){
 	
 	// all problems are solved below
 	// some data can be found in the #data div
+	
+	problemTracker[18] = function(data){
+		function maxSum(node){
+			if (!node.left && !node.right) return node.value;
+			if (node.max) return node.max;
+			var leftSum = maxSum(node.left) + node.value;
+			var rightSum = maxSum(node.right) + node.value;
+			var max = Math.max(leftSum, rightSum);
+			node.max = max;
+			return max;
+		}
+		
+		function Tree(raw) {
+			var self = this;
+			var nodes = [];
+			var rows = raw.split('\n');
+			for(var i = 0; i < rows.length; i++){
+				rows[i] = rows[i].split(' ');
+				nodes[i] = [];
+				for(var j = 0; j < rows[i].length; j++){
+					nodes[i][j] = {
+						value: parseInt(rows[i][j])
+					};
+				}
+			}
+			// nodes are built, now we assign children
+			for(i = 0; i < rows.length - 1; i++){
+				for(j = 0; j < rows[i].length; j++){
+					var cur = nodes[i][j];
+					cur.left = nodes[i+1][j];
+					cur.right = nodes[i+1][j+1];
+				}
+			}
+			
+			self.root = nodes[0][0];
+		}
+		var tree = new Tree(data);
+		var root = tree.root;
+		
+		return maxSum(root);
+	};
+	
+	problemTracker[17] = function(){
+		var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+		var dees = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'onehundred'];
+		var dred = 'hundred';
+		function numberToWords(n){
+			if (n < 20) return ones[n];
+			if (n < 100) return dees[Math.floor(n / 10)] + '' + numberToWords(n % 10);
+			if (n < 1000) return ones[Math.floor(n/100)] + 'hundred' + (n%100 == 0? '' : 'and') + numberToWords(n%100);
+			if (n == 1000) return 'onethousand';
+			return 'too high for now';
+		}
+		
+		var letterCount = 0;
+		for(var i = 0; i <= 1000; i++){
+			var wrds = numberToWords(i);
+			letterCount+=wrds.length;
+		}
+		return letterCount;
+	};
+	
+	problemTracker[16] = function(){
+		throw 'up. This problem is not correct.';
+		var result = Math.pow(2, 1000);
+		var resultStr = result + '';
+		var sum = 0;
+		for(var i = 0; i < resultStr.length; i++){
+			sum += parseInt(resultStr[i]);
+		}
+		return sum;
+	};
 	
 	problemTracker[15] = function(){
 		return countPaths(20, 20);
