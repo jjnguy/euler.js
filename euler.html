@@ -238,6 +238,28 @@ function fact(n) {
 	// all problems are solved below
 	// some data can be found in the #data div
 	
+	problemTracker[23] = function(){
+		var abundantMem = {};
+		function isAbundant(n){
+			if (typeof(abundantMem[n] !== 'undefined') return abundantMem[n];
+			var divisorSum = 1;
+			var lim = Math.sqrt(n);
+			for(var i = 2; i < lim; i++){
+				if (n % i == 0) {
+					divisorSum += i + (n/i);
+				}
+			}
+			var result = divisorSum > n;
+			abundantMem[n] = result;
+			return result;
+		}
+		
+		var allAbundant = [];
+		for(var i = 0; i < 28123; i++){
+			
+		}
+	};
+	
 	problemTracker[22] = function(data){
 		function abcValue(chr) {
 			if (chr == '"') return 0;
