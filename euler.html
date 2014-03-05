@@ -268,7 +268,19 @@
         }
 
         function listPermutations(chars) {
-
+            if (chars.length == 1) return [chars[0]];
+            if (chars.length == 2) return [chars[0] + chars[1], chars[1] + chars[0]];
+            var result = [];
+            for (var i = 0; i < chars.length; i++) {
+                var subChars = chars.slice(0);
+                subChars.splice(i, 1);
+                var subPerms = listPermutations(subChars);
+                for (var j = 0; j < subPerms.length; j++) {
+                    subPerms[j] = chars[i] + subPerms[j];
+                }
+                result = result.concat(subPerms);
+            }
+            return result;
         }
     </script>
     <script>
@@ -278,7 +290,9 @@
         // some data can be found in the #data div
 
         problemTracker[24] = function () {
-
+            var perms = listPermutations(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+            //perms.sort();
+            return perms[999999];
         };
 
         problemTracker[23] = function () {
