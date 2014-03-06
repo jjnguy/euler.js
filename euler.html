@@ -176,9 +176,10 @@
         }
         var primeM = { 0: false, 1: false, 2: true, 3: true, 4: false, 5: true };
         function isPrime(n) {
-            if (typeof primeM[n] !== "undefined") return primeM[n];
+            if (n < 0) return false;
+            if (typeof (primeM[n]) !== "undefined") return primeM[n];
             if (isEven(n)) return false;
-            var lim = Math.round(Math.sqrt(n + 1) + 1);
+            var lim = Math.sqrt(n + 1) + 1;
             for (var i = 3; i < lim; i += 2) {
                 if (isDivisibleBy(n, i)) {
                     primeM[n] = false;
@@ -288,6 +289,128 @@
 
         // all problems are solved below
         // some data can be found in the #data div
+
+        problemTracker[28] = function () {
+            function createSpiral(width) {
+                if (isEven(width)) throw 'Cannot make even spiral';
+                var result = [];
+                for (var i = 0; i < width; i++) {
+                    result[i] = [];
+                    for (var j = 0; j < width; j++) {
+                        result[i][j] = 0;
+                    }
+                }
+
+                var x = Math.floor(width / 2);
+                var y = x;
+                var currentWidth = 1;
+                var xTraveled = 0;
+                var yTraveled = 0;
+                var currentDirection = 'right';
+
+                var currentNumber = 1;
+
+                result[x][y] = currentNumber++;
+                //x++;
+
+                while (currentNumber <= width * width) {
+                    // make moves
+                    // then determine if direction change is needed
+                    if (currentDirection == 'right') {
+                        y++;
+                        yTraveled++;
+                        if (yTraveled == currentWidth) {
+                            currentDirection = 'down';
+                            yTraveled = 0;
+                            currentWidth += 2;
+                        }
+                    } else if (currentDirection == 'down') {
+                        x++;
+                        xTraveled++;
+                        if (xTraveled == currentWidth - 2) {
+                            currentDirection = 'left';
+                            xTraveled = 0;
+                        }
+                    } else if (currentDirection == 'left') {
+                        y--;
+                        yTraveled++;
+                        if (yTraveled == currentWidth - 1) {
+                            currentDirection = 'up';
+                            yTraveled = 0;
+                        }
+                    } else if (currentDirection == 'up') {
+                        x--;
+                        xTraveled++;
+                        if (xTraveled == currentWidth - 1) {
+                            currentDirection = 'right';
+                            xTraveled = 0;
+                        }
+                    } else throw 'Bad direction';
+
+                    result[x][y] = currentNumber++;
+
+                    
+                }
+
+                return result;
+            }
+            var spiral = createSpiral(1001);
+
+            var toLog = '';
+            for (var i = 0; i < spiral.length; i++) {
+                for (var j = 0; j < spiral[i].length; j++) {
+                    toLog += (spiral[i][j] < 10 ? ' ' : '') + (spiral[i][j] < 100 ? ' ' : '') + (spiral[i][j] < 1000 ? ' ' : '') + spiral[i][j] + ' ';
+                }
+                toLog += '\n';
+            }
+            // console.log(toLog);
+
+            var sum = 0;
+            for (var i = 0; i < spiral.length; i++) {
+                sum += spiral[i][i];
+                sum += spiral[i][spiral.length - i - 1];
+            }
+
+            return sum - 1;
+        };
+
+        problemTracker[27] = function () {
+            function getQuadFunction(a, b) {
+                return function (n) {
+                    return n * n + a * n + b;
+                };
+            }
+
+            function countConsecPrimesFromFunction(a, b) {
+                var currentQuad = getQuadFunction(a, b);
+                for (var n = 0; n < 10000000; n++) {
+                    var result = currentQuad(n);
+                    if (!isPrime(result)) {
+                        return n;
+                    }
+                }
+            }
+
+            // return countConsecPrimesFromFunction(-79, 1601);
+
+            var maxConsec = 0;
+            var maxProd = 0;
+
+            for (var a = -999; a < 1000; a++) {
+                for (var b = -999; b < 1000; b++) {
+                    var currentConsec = countConsecPrimesFromFunction(a, b);
+                    if (currentConsec > maxConsec) {
+                        maxConsec = currentConsec;
+                        maxProd = a * b;
+                    }
+                }
+            }
+            return maxProd;
+        };
+
+        problemTracker[26] = { skipped: true };
+
+        problemTracker[25] = { skipped: true };
 
         problemTracker[24] = function () {
             var perms = listPermutations(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
