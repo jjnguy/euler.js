@@ -290,6 +290,47 @@
         // all problems are solved below
         // some data can be found in the #data div
 
+        problemTracker[30] = function(){
+          function digits(num){
+            if (num < 10) return [num];
+            var subDigs = digits(Math.floor(num / 10));
+            subDigs.push(num % 10);
+            return subDigs;
+          }
+
+          //alert(digits(17562));
+
+          //return 42;
+
+          var sumOfFifths = [];
+          for(var i = 0; i < 100000000; i++){
+            var digs = digits(i);
+            var digSum = 0;
+            for(var j = 0; j < digs.length; j++){
+              digSum += Math.pow(digs[j], 5);
+            }
+            if (digSum == i) sumOfFifths.push(i);
+          }
+
+          var sum = 0;
+          for(var i = 0; i < sumOfFifths.length; i++){
+            sum += sumOfFifths[i];
+          }
+          return sum;
+        };
+
+        problemTracker[29] = function(){
+          var results = [];
+          for(var a = 2; a <= 100; a++){
+            for(var b = 2; b <= 100; b++){
+              results.push(Math.pow(a,b));
+            }
+          }
+          var distinctRes = results.distinct(function(item){return item;});
+          return distinctRes.length;
+        };
+        problemTracker[29].skipped = true;
+
         problemTracker[28] = function () {
             function createSpiral(width) {
                 if (isEven(width)) throw 'Cannot make even spiral';
@@ -349,7 +390,7 @@
 
                     result[x][y] = currentNumber++;
 
-                    
+
                 }
 
                 return result;
