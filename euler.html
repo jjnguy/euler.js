@@ -227,7 +227,7 @@
 
         var factMem = {};
         function fact(n) {
-            if (n == 1) return 1;
+            if (n == 1 || n == 0) return 1;
             if (n == 2) return 2;
             if (factMem[n]) return factMem[n];
             var result = fact(n - 1) * n;
@@ -283,6 +283,30 @@
             }
             return result;
         }
+
+        function isPandigital(num){
+          num = num + '';
+          if (num.length != 9) return false;
+          if (num.indexOf('1') == -1) return false;
+          if (num.indexOf('2') == -1) return false;
+          if (num.indexOf('3') == -1) return false;
+          if (num.indexOf('4') == -1) return false;
+          if (num.indexOf('5') == -1) return false;
+          if (num.indexOf('6') == -1) return false;
+          if (num.indexOf('7') == -1) return false;
+          if (num.indexOf('8') == -1) return false;
+          if (num.indexOf('9') == -1) return false;
+
+          return true;
+        }
+
+        function digits(num){
+          if (num < 10) return [num];
+          var subDigs = digits(Math.floor(num / 10));
+          subDigs.push(num % 10);
+
+          return subDigs;
+        }
     </script>
     <script>
         var problemTracker = [];
@@ -290,23 +314,35 @@
         // all problems are solved below
         // some data can be found in the #data div
 
-        problemTracker[38] = function(_, prog){
-          function isPandigital(num){
-            num = num + '';
-            if (num.length != 9) return false;
-            if (num.indexOf('1') == -1) return false;
-            if (num.indexOf('2') == -1) return false;
-            if (num.indexOf('3') == -1) return false;
-            if (num.indexOf('4') == -1) return false;
-            if (num.indexOf('5') == -1) return false;
-            if (num.indexOf('6') == -1) return false;
-            if (num.indexOf('7') == -1) return false;
-            if (num.indexOf('8') == -1) return false;
-            if (num.indexOf('9') == -1) return false;
+        problemTracker[40] = function(){
+          retunr -1;
+        };
 
-            return true;
+        problemTracker[39] = function(){
+          function isPythagTriplet(a, b, c){
+            return a*a + b*b == c*c;
           }
+          var maxSln = 0;
+          var maxP = -1;
+          for(var p = 4; p <= 1000; p++){
+            var tripCount = 0;
+            for(var a = 1; a < p / 2; a++){
+              var bAndC = p - a;
+              for(var b = 1; b < p / 2; b++){
+                var c = bAndC - b;
+                if (!isPythagTriplet(a, b, c)) continue;
+                tripCount++;
+              }
+            }
+            if (tripCount > maxSln){
+              maxSln = tripCount;
+              maxP = p;
+            }
+          }
+          return maxP;
+        };
 
+        problemTracker[38] = function(){
           var largestPan = 123456789;
           for(var i = 0; i < 10000000; i++){
             var panConcat = '';
@@ -392,10 +428,69 @@
           return circularCount;
         };
 
-        problemTracker[34] = { skipped : true};
-        problemTracker[33] = { skipped : true};
+        problemTracker[34] = function(){
+          var sum = 0;
+          for(var i = 3; i < 1000000; i++){
+            var digs = digits(i);
+            var digSum = 0;
+            for(var j = 0; j < digs.length; j++){
+              digSum += fact(digs[j]);
+            }
+            if (digSum == i) sum += i;
+          }
+          return sum;
+        };
 
-        problemTracker[32] = function(){};
+        problemTracker[33] = function(){
+          var product = 1;
+          for(var numer = 10; numer < 100; numer++){
+            if (numer % 10 == 0) continue;
+            var numerDigs = numer + '';
+            if (numerDigs[0] == numerDigs[1]) continue;
+            for(var denom = numer + 1; denom < 100; denom++){
+              if (denom % 10 == 0) continue;
+              var denomDigs = denom + '';
+              if (denomDigs[0] == denomDigs[1]) continue;
+
+              if (numerDigs.indexOf(denomDigs[0]) == -1
+                && numerDigs.indexOf(denomDigs[1]) == -1){
+                continue; // can't 'reduce'
+              }
+
+              var charToReplace = numerDigs.indexOf(denomDigs[0]) != -1 ?
+                denomDigs[0] : denomDigs[1];
+
+              var newNumer = parseInt(numerDigs.replace(charToReplace, ''));
+              var newDenom = parseInt(denomDigs.replace(charToReplace, ''));
+
+              if (numer / denom == newNumer / newDenom){
+                product *= (numer / denom);
+              }
+
+            }
+          }
+          return product; // this will be the decimal representation
+        };
+
+        problemTracker[32] = function(){
+          var answers = [];
+          for(var i = 1; i < 1000000; i++){
+            for(var j = 1; j < 100000; j++){
+              var product = i * j;
+              var pandigit = '' + i + j + product;
+              if (pandigit.length > 9) break;
+              if (isPandigital(pandigit)){
+                answers[product] = true;
+                break;
+              }
+            }
+          }
+          var sum = 0;
+          for(var i = 0; i < answers.length; i++){
+            sum += answers[i] ? i : 0;
+          }
+          return sum;
+        };
 
         problemTracker[31] = function(){
           var denominations = [1, 2, 5, 10, 20, 50, 100, 200];
@@ -419,17 +514,6 @@
         problemTracker[31].skipped = true;
 
         problemTracker[30] = function(){
-          function digits(num){
-            if (num < 10) return [num];
-            var subDigs = digits(Math.floor(num / 10));
-            subDigs.push(num % 10);
-
-            return subDigs;
-          }
-
-          //alert(digits(17562));
-          //return 42;
-
           var sumOfFifths = [];
           for(var i = 2; i < 10000000; i++){
             var digs = digits(i);
