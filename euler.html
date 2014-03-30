@@ -290,20 +290,148 @@
         // all problems are solved below
         // some data can be found in the #data div
 
+        problemTracker[38] = function(_, prog){
+          function isPandigital(num){
+            num = num + '';
+            if (num.length != 9) return false;
+            if (num.indexOf('1') == -1) return false;
+            if (num.indexOf('2') == -1) return false;
+            if (num.indexOf('3') == -1) return false;
+            if (num.indexOf('4') == -1) return false;
+            if (num.indexOf('5') == -1) return false;
+            if (num.indexOf('6') == -1) return false;
+            if (num.indexOf('7') == -1) return false;
+            if (num.indexOf('8') == -1) return false;
+            if (num.indexOf('9') == -1) return false;
+
+            return true;
+          }
+
+          var largestPan = 123456789;
+          for(var i = 0; i < 10000000; i++){
+            var panConcat = '';
+            for(var j = 1; j < 1000000; j++){
+              panConcat += i * j;
+              if (panConcat.length > 9) break;
+              if (panConcat.length == 9 && isPandigital(panConcat)){
+                if (largestPan < parseInt(panConcat)) largestPan = panConcat;
+                break;
+              }
+            }
+          }
+
+          return largestPan;
+        };
+
+        problemTracker[37] = function(){
+          function getAllTruncations(num){
+            var trunks = [];
+            var numStr = num + '';
+            for(var i = 0; i < numStr.length; i++){
+              trunks.push(parseInt(numStr.substring(i)));
+              trunks.push(parseInt(numStr.substring(0, numStr.length - i)));
+            }
+            return trunks;
+          }
+
+          var sum = 0;
+          for(var i = 10; i < 1000000; i++){
+            var allPrime = true;
+            var trunks = getAllTruncations(i);
+            for(var j = 0; j < trunks.length; j++){
+              if (!isPrime(trunks[j])){
+                allPrime = false;
+                break;
+              }
+            }
+            if (allPrime) {
+              sum += i;
+            }
+          }
+          return sum;
+        };
+
+        problemTracker[36] = function(){
+          var sum = 0;
+          for(var i = 0; i < 1000000; i++){
+            if (isPalindrome(i) && isPalindrome(i.toString(2))){
+              sum += i;
+            }
+          }
+          return sum;
+        }
+
+        problemTracker[35] = function(){
+          function getRotations(num){
+            var rots = [];
+            var numStr = num + '';
+            for(var i = 0; i < numStr.length; i++){
+              numStr = numStr.substring(1) + numStr[0];
+              rots.push(parseInt(numStr));
+            }
+            return rots;
+          }
+
+          var circularCount = 0;
+          for(var i = 0; i < 1000000; i++){
+            if (isPrime(i)){
+              var allPrime = true;
+              var rots = getRotations(i);
+              for(var j = 0; j < rots.length; j++){
+                if (!isPrime(rots[j])){
+                  allPrime = false;
+                  break;
+                }
+              }
+              if (allPrime){
+                circularCount++;
+              }
+            }
+          }
+
+          return circularCount;
+        };
+
+        problemTracker[34] = { skipped : true};
+        problemTracker[33] = { skipped : true};
+
+        problemTracker[32] = function(){};
+
+        problemTracker[31] = function(){
+          var denominations = [1, 2, 5, 10, 20, 50, 100, 200];
+          var changeMem = [0, 1, 2, 2, 3];
+          function changeWays(pence){
+            if (changeMem[pence]) return changeMem[pence];
+            if (pence < 1) return 0;
+            if (pence == 1) return 1;
+
+            var changeWaysSum = 0;
+            for(var i = 0; i < denominations.length; i++){
+              var sub = changeWays(pence - denominations[i]);
+              if (sub != 0) changeWaysSum += sub + 1;
+            }
+            changeMem[pence] = changeWaysSum;
+            return changeWaysSum;
+          }
+
+          return changeWays(5);
+        };
+        problemTracker[31].skipped = true;
+
         problemTracker[30] = function(){
           function digits(num){
             if (num < 10) return [num];
             var subDigs = digits(Math.floor(num / 10));
             subDigs.push(num % 10);
+
             return subDigs;
           }
 
           //alert(digits(17562));
-
           //return 42;
 
           var sumOfFifths = [];
-          for(var i = 0; i < 100000000; i++){
+          for(var i = 2; i < 10000000; i++){
             var digs = digits(i);
             var digSum = 0;
             for(var j = 0; j < digs.length; j++){
@@ -838,11 +966,16 @@
             var newLabel = document.createElement('label');
             var newInput = document.createElement('input');
             var newButton = document.createElement('button');
+            var newSpan = document.createElement('span');
             var dataDiv = document.getElementById('d' + i);
             var data = dataDiv ? dataDiv.textContent : null;
             newButton.onclick = (function (probNum, input, datas) {
                 return function () {
-                    input.value = problemTracker[probNum](datas);
+                    input.value = problemTracker[probNum](datas, {
+                      intermediate : function(val){
+                        newSpan.innerHTML = val;
+                      }
+                    });
                 }
             })(i, newInput, data);
             newButton.appendChild(document.createTextNode('solve'));
@@ -856,6 +989,7 @@
             } else {
                 newDiv.appendChild(newButton);
             }
+            newDiv.appendChild(newSpan);
 
             solutionDiv.appendChild(newDiv);
         }
