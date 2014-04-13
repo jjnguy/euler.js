@@ -459,7 +459,7 @@
             }
           }
           return sum;
-        }
+        };
 
         problemTracker[35] = function(){
           function getRotations(num){
@@ -818,6 +818,9 @@
         problemTracker[18] = function (data) {
             function maxSum(node) {
                 if (!node.left && !node.right) return node.value;
+                if (!node.left || !node.right) {
+                    throw 'up. Bad tree structure.';
+                }
                 if (node.max) return node.max;
                 var leftSum = maxSum(node.left) + node.value;
                 var rightSum = maxSum(node.right) + node.value;
@@ -829,9 +832,9 @@
             function Tree(raw) {
                 var self = this;
                 var nodes = [];
-                var rows = raw.split('\n');
+                var rows = raw.trim().split('\n');
                 for (var i = 0; i < rows.length; i++) {
-                    rows[i] = rows[i].split(' ');
+                    rows[i] = rows[i].trim().split(' ');
                     nodes[i] = [];
                     for (var j = 0; j < rows[i].length; j++) {
                         nodes[i][j] = {
@@ -1119,11 +1122,7 @@
             var data = dataDiv ? dataDiv.textContent : null;
             newButton.onclick = (function (probNum, input, datas) {
                 return function () {
-                    input.value = problemTracker[probNum](datas, {
-                      intermediate : function(val){
-                        newSpan.innerHTML = val;
-                      }
-                    });
+                    input.value = problemTracker[probNum](datas);
                 }
             })(i, newInput, data);
             newButton.appendChild(document.createTextNode('solve'));
