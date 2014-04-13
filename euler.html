@@ -308,6 +308,17 @@
 
           return subDigs;
         }
+
+        function primeFactors(num){
+            var factors = [];
+            for(var i = 2; i <= num; i++){
+                while (isDivisibleBy(num, i)){
+                    factors.push(i);
+                    num = num / i;
+                }
+            }
+            return factors;
+        }
     </script>
     <script>
         var problemTracker = [];
@@ -1082,12 +1093,8 @@
 
         problemTracker[3] = function () {
             var dividend = 600851475143;
-            var divisor = Math.round(Math.sqrt(dividend + 2)) + 1;
-            for (var i = divisor; i > 0; i -= 2) {
-                if (isDivisibleBy(dividend, i) && isPrime(i)) {
-                    return i;
-                }
-            }
+            var factors = primeFactors(dividend);
+            return factors[factors.length - 1];
         };
 
         problemTracker[2] = function () {
