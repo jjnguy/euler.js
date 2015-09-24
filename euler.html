@@ -155,10 +155,10 @@
     <script>
         // extensions
         Array.prototype.distinct = function (keyFunc) {
-            var result = [];
-            var foundKeys = {};
-            for (var i = 0; i < this.length; i++) {
-                var key = keyFunc(this[i]);
+            let result = [];
+            let foundKeys = {};
+            for (let i = 0; i < this.length; i++) {
+                let key = keyFunc(this[i]);
                 if (!foundKeys[key]) {
                     result.push(this[i]);
                     foundKeys[key] = true;
@@ -871,9 +871,9 @@
         };
 
         problemTracker[17] = function () {
-            var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-            var dees = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'onehundred'];
-            var dred = 'hundred';
+            let ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+            let dees = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'onehundred'];
+            let dred = 'hundred';
             function numberToWords(n) {
                 if (n < 20) return ones[n];
                 if (n < 100) return dees[Math.floor(n / 10)] + '' + numberToWords(n % 10);
@@ -1119,7 +1119,7 @@
 
         // process problemTracker to create UI
         var solutionDiv = document.getElementById('solutions');
-        for (var i = 1; i < problemTracker.length; i++) {
+        for (let i = 1; i < problemTracker.length; i++) {
             var newDiv = document.createElement('div');
             var newLabel = document.createElement('label');
             var newInput = document.createElement('input');
